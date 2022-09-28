@@ -22,28 +22,26 @@ class DocumentParser(object):
         for n, element in enumerate(self.document.element.body.iterchildren()):
             # print(n, element)
             if isinstance(element, CT_P):
-                yield from self.parse_paragraph(element)
+                yield from self.parse_paragraph(Paragraph(element, self.document))
             elif isinstance(element, CT_Tbl):
                 yield self.parse_table(Table(element, self.document))
 
-    def parse_paragraph(self, element):
+    def parse_paragraph(self, paragraph):
+        """parse paragraph
         """
-        """
-        if element.xpath('.//a:graphic|.//w:hyperlink'):
-            yield 'multipart', self._parse_child_paragraph(element)
+        if paragraph._element.xpath('.//a:graphic|.//w:hyperlink'):
+            yield 'multipart', self._parse_child_paragraph(paragraph._element)
         else:
-            p = Paragraph(element, self.document)
-            if p.text.strip():
-                # p.text is wrong some times
-                text = ''.join(each.text for each in element.xpath('.//w:r')).strip()
-                yield 'paragraph', {'text': text, 'style_id': p.style.style_id}
+            # text = ''.join(each.text for each in paragraph._element.xpath('.//w:t')).strip()
+            text = util.get_element_text(paragraph._element)
+            if text:
+                yield 'paragraph', {'text': text, 'style_id': paragraph.style.style_id}
 
-    def _parse_child_paragraph(self, parent):
+    def _parse_child_paragraph(self, element):
         data = []
-        for child in parent.iterchildren():
-            if child.text:
-                data.append(child.text.strip())
-            elif isinstance(child, CT_R) and child.xpath('.//a:graphic'):
+        for child in element.iterchildren():
+
+            if isinstance(child, CT_R) and child.xpath('.//a:graphic'):
                 rid = child.xpath('.//a:blip/@*')[0]
                 im = self.document.part.rels[rid]._target
                 image, filename = util.blob_to_image(
@@ -59,15 +57,19 @@ class DocumentParser(object):
                 })
             elif isinstance(child, docx.oxml.etree._Element):
                 # print(child, child.values())
-                values = child.values()
-                if values and values[0].startswith('rId'):
-                    href = self.document.part.rels[values[0]]._target
-                    text = ''.join(
-                        each.text for each in child.getchildren() if each.text).strip()
-                    data.append({
-                        'text': text,
-                        'href': href,
-                    })
+                for value in child.values():
+                    if value.startswith('rId'):
+                        href = self.document.part.rels[value]._target
+                        text = util.get_element_text(child)
+                        data.append({
+                            'text': text,
+                            'href': href,
+                        })
+            else:
+                text = util.get_element_text(child)
+                if text:
+                    data.append(child.text.strip())
+
         return data
 
     def parse_table(self, table, strip=True):

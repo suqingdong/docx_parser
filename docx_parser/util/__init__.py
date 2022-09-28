@@ -5,6 +5,10 @@ from pathlib import Path
 from PIL import Image
 
 
+def get_element_text(element):
+    return ''.join(c.text for c in element.iterchildren() if c.text).strip()
+
+
 def blob_to_image(blob,
                   image_as='base64',
                   image_type='jpeg',
