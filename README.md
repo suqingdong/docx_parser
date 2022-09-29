@@ -19,7 +19,7 @@ docx_parser --help
 docx_parser tests/demo.docx -D tests/media -o tests/out.file.jl
 
 # parse image as base64 string
-  docx_parser tests/demo.docx -A base64 -o tests/out.base64.jl
+docx_parser tests/demo.docx -A base64 -o tests/out.base64.jl
 ```
 - Python
 ```python
