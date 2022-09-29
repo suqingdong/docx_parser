@@ -1,3 +1,6 @@
+![PyPI](https://img.shields.io/pypi/v/docx_parser)
+![GitHub last commit](https://img.shields.io/github/last-commit/suqingdong/docx_parser)
+
 ## Parse all contents of a docx file with `python-docx`
 
 ### Installation
