@@ -6,7 +6,14 @@ from PIL import Image
 
 
 def get_element_text(element):
-    return ''.join(c.text for c in element.iterchildren() if c.text).strip()
+    """get all text of an element
+    """
+    try:
+        children = element.xpath('.//w:t')  # not working for lxml.etree._Element
+    except:
+        children = element.iterchildren()
+    print(element.xml)
+    return ''.join(c.text for c in children if c.text).strip()
 
 
 def blob_to_image(blob,
@@ -17,9 +24,6 @@ def blob_to_image(blob,
                   ):
     """convet image blob data to image file or base64 string
     """
-    if image_as == 'blob':
-        return blob, f'{filename}.blob'
-
     image = Image.open(io.BytesIO(blob))
     if image_type.lower() in ('jpeg', 'jpg'):
         image_type = 'jpeg'
