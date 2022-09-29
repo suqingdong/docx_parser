@@ -21,7 +21,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     entry_points={'console_scripts': [
-        'docx_parser = docx_parser.bin.main:main.callback',
+        'docx_parser = docx_parser.bin.main:main',
     ]},
     classifiers=[
         'Development Status :: 5 - Production/Stable',

@@ -11,8 +11,8 @@ epilog = click.style('''\n
 \b
 examples:
     docx_parser --help
-    docx_parser tests/demo.docx
-    docx_parser tests/demo.docx -A base64 -o out.jl
+    docx_parser tests/demo.docx -D tests/media -o tests/out.file.jl
+    docx_parser tests/demo.docx -A base64 -o tests/out.base64.jl
 
 contact: {author} <{author_email}>
 '''.format(**version_info), fg='green')

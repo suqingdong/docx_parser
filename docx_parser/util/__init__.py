@@ -12,7 +12,6 @@ def get_element_text(element):
         children = element.xpath('.//w:t')  # not working for lxml.etree._Element
     except:
         children = element.iterchildren()
-    print(element.xml)
     return ''.join(c.text for c in children if c.text).strip()
 
 
