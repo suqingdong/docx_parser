@@ -50,20 +50,26 @@ class DocumentParser(object):
                 part = util.get_element_text(child)
                 if not part:
                     continue
+            if part is None:
+                continue
             data.append(part)
         return data
 
     def _parse_graphic(self, element):
         """parse graphic, return image data
         """
-        rid = element.xpath('.//a:blip/@*')[0]
-        im = self.document.part.rels[rid]._target
-        image, filename = util.blob_to_image(
-            im.blob,
-            image_as=self.image_as,
-            image_type=self.image_type,
-            filename=im.sha1,
-            media_dir=self.media_dir)
+        rid = None
+        try:
+            rid = element.xpath('.//a:blip/@*')[0]
+            im = self.document.part.rels[rid]._target
+            image, filename = util.blob_to_image(
+                im.blob,
+                image_as=self.image_as,
+                image_type=self.image_type,
+                filename=im.sha1,
+                media_dir=self.media_dir)
+        except:
+            return None
         return {
             'type': self.image_as,
             'filename': filename,
