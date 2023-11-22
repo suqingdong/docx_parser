@@ -24,9 +24,10 @@ def blob_to_image(blob,
     """convet image blob data to image file or base64 string
     """
     image = Image.open(io.BytesIO(blob))
+
     if image_type.lower() in ('jpeg', 'jpg'):
         image_type = 'jpeg'
-        image.convert('RGB')               # png => jpeg, smaller size
+        image = image.convert('RGB')               # png => jpeg, smaller size
         filename = f'{filename}.jpg'
     else:
         filename = f'{filename}.png'

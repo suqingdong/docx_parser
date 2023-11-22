@@ -31,14 +31,22 @@ contact: {author} <{author_email}>
               type=click.Choice(['jpeg', 'png']), show_choices=True,
               default='jpeg', show_default=True)
 @click.option('-D', '--media-dir', help='the media directory to save files', default='media', show_default=True)
+@click.option('-F', '--outfmt', help='the type of output', type=click.Choice(['jl', 'json']), default='jl', show_default=True)
 @click.version_option(version=version_info['version'], prog_name=version_info['prog'])
 def main(**kwargs):
     out = open(kwargs['outfile'], 'w') if kwargs['outfile'] else sys.stdout
     with out:
         doc = DocumentParser(kwargs['infile'], **kwargs)
+        data = []
         for each in doc.parse():
-            line = json.dumps(each, ensure_ascii=False)
-            out.write(line + '\n')
+            if kwargs['outfmt'] == 'jl':
+                line = json.dumps(each, ensure_ascii=False)
+                out.write(line + '\n')
+            else:
+                data.append(each)
+
+        if kwargs['outfmt'] == 'json':
+            out.write(json.dumps(data, ensure_ascii=False))
 
 
 if __name__ == "__main__":
