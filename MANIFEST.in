@@ -1,2 +1,2 @@
 include requirements.txt
-include docx_parser/version/version.json
+include docx_parser/version.json

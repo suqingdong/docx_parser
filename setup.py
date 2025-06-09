@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 
 BASE_DIR = Path(__file__).resolve().parent
-version_info = json.load(BASE_DIR.joinpath('docx_parser', 'version', 'version.json').open())
+version_info = json.load(BASE_DIR.joinpath('docx_parser', 'version.json').open())
 
 setup(
     name=version_info['prog'],
@@ -27,7 +27,6 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Operating System :: OS Independent',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.8',
