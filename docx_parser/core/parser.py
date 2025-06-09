@@ -5,6 +5,11 @@ from docx.oxml.table import CT_Tbl
 from docx.oxml.text.paragraph import CT_P
 from docx.oxml.text.run import CT_R
 
+try:
+    from docx.oxml.text.hyperlink import CT_Hyperlink
+except ImportError:
+    CT_Hyperlink = docx.oxml.etree._Element
+
 from docx.table import Table
 from docx.text.paragraph import Paragraph
 
@@ -42,9 +47,11 @@ class DocumentParser(object):
         data = []
         for child in element.iterchildren():
 
+            # print(111, child, type(child))
+
             if isinstance(child, CT_R) and child.xpath('.//a:graphic'):
                 part = self._parse_graphic(child)
-            elif isinstance(child, docx.oxml.etree._Element):
+            elif isinstance(child, CT_Hyperlink):  # Python 3.8 ok
                 part= self._parse_hyperlink(child)
             else:
                 part = util.get_element_text(child)
